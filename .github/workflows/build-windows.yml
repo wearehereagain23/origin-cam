@@ -26,15 +26,18 @@ jobs:
           .\vcpkg\vcpkg install wxwidgets:x64-windows
           .\vcpkg\vcpkg install opencv4:x64-windows
           .\vcpkg\vcpkg install curl:x64-windows
+          .\vcpkg\vcpkg install ixwebsocket:x64-windows
 
       - name: Configure
         run: cmake -B build -S . "-DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake"
 
       - name: Build
-        run: cmake --build build --config Release
+        run: cmake --build build --config Release --parallel
 
       - name: Upload EXE
         uses: actions/upload-artifact@v4
         with:
           name: OriginCam-Windows
-          path: build/Release/*
+          path: |
+            build/Release/*.exe
+            build/Release/*.dll
